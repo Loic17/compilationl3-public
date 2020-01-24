@@ -5,7 +5,35 @@ Helpers
 lettre = [['a' .. 'z'] + ['A' .. 'Z']];
 
 Tokens
-
+%token SI
+%token POINT_VIRGULE
+PLUS ='+'; 
+%token MOINS 
+%token FOIS 
+%token DIVISE 
+%token PARENTHESE_OUVRANTE 
+%token PARENTHESE_FERMANTE 
+%token CROCHET_OUVRANT 
+%token CROCHET_FERMANT
+%token ACCOLADE_OUVRANTE 
+%token ACCOLADE_FERMANTE 
+%token EGAL 
+%token INFERIEUR 
+%token ET 
+%token OU 
+%token NON 
+%token ALORS 
+%token SINON 
+%token TANTQUE 
+%token FAIRE 
+%token ENTIER 
+%token RETOUR 
+%token LIRE 
+%token ECRIRE 
+%token IDENTIF 
+%token NOMBRE 
+%token VIRGULE 
+ou = '|';
 espaces = (' ' | 13 | 10)+;
 commentaire= '#' [[0 .. 0xffff] - [10 + 13]]* (10 | 13 | 10 13);
 
@@ -15,5 +43,44 @@ espaces, commentaire;
 
 Productions
 
+expression= {ou} expression ou expression2 | {expr2} expression2;
+expression2= {et} expression2 '&' expression3|{expr3} expression3;
+expression3= {egale inf} expression3 '=' expression4| {expr4} expression3 '<' expression4|expression4;
+expression4= expression4 '+' expression5 | expression4 '-' expression5|expression5;
+expression5: expression5'*' expression6 |expression5 '/' expression6|expression6;
+expression6: '!'expression6| expression7;
+expression7: '(' expression ')'|NOMBRE|var|appelFct|LIRE;
+var: IDENTIF | IDENTIF  '[' expression']';
+appelFct: IDENTIF  '('listExp')';
+listExp: expression listExpbis|;
+listExpbis: ',' expression listExpbis|;
+
+IAFF: var '=' expression ';';
+IBLOC: '{' listinstr '}';
+listinstr : IAFF listinstr|;
+ISI: SI expression ALORS  IBLOC|SI expression ALORS  IBLOC sinon IBLOC;
+ITANT: TANTQUE expression FAIRE  IBLOC;
+
+IECRIRE: ECRIRE expression ';' ;
+ILIRE: LIRE expression ';' ;
+
+declaration: declVars|declFonc;
+declVars: ENTIER declVar ';'| ENTIER declVar'['NOMBRE']' ';';
+declVar: IDENTIF "="expression decVar2| IDENTIF decVar2;
+declVar2: ',' declVar ';'|';';
+
+
+
+declFonc:= types IDENTIF '(' dec')';
+types:= ENTIER | "void";
+dec: ENTIER IDENTIF dec2;
+dec2: ',' dec|;
+
 programme = optdecvar listedecfonc ;
+
+
+
+
+
+
 
