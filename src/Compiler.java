@@ -4,13 +4,8 @@ import sc.node.*;
 import java.io.*;
 import sa.*;
 import ts.*;
-<<<<<<< HEAD
 //import c3a.*;
 //import nasm.*;
-=======
-import c3a.*;
-import nasm.*;
->>>>>>> 5be55f6df95ac0c66923a06d3fc6997bae6b480e
 //import fg.*;
 
 public class Compiler
@@ -41,31 +36,20 @@ public class Compiler
 	    System.out.println("[PRINT SC]");
 	    tree.apply(new Sc2Xml(baseName));
 
-<<<<<<< HEAD
-	    System.out.println("[SA]");
-=======
 	    System.out.print("[BUILD SA] ");
->>>>>>> 5be55f6df95ac0c66923a06d3fc6997bae6b480e
 	    Sc2sa sc2sa = new Sc2sa();
 	    tree.apply(sc2sa);
 	    SaNode saRoot = sc2sa.getRoot();
 
 	    System.out.println("[PRINT SA]");
 	    new Sa2Xml(saRoot, baseName);
-<<<<<<< HEAD
-
-	    
-/*		    
-	    System.out.println("[TABLE SYMBOLES]");
-=======
 		    
 	    System.out.print("[BUILD TS] ");
->>>>>>> 5be55f6df95ac0c66923a06d3fc6997bae6b480e
 	    Ts table = new Sa2ts(saRoot).getTableGlobale();
 
 	    System.out.println("[PRINT TS]");
 	    table.afficheTout(baseName);
-
+/*
 	    System.out.print("[BUILD C3A]");
 	    C3a c3a = new Sa2c3a(saRoot, table).getC3a();
 
@@ -107,3 +91,4 @@ public class Compiler
     }
     
 }
+

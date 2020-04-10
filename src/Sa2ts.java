@@ -5,87 +5,109 @@ import ts.*;
 
 public class Sa2ts extends SaDepthFirstVisitor <Void>{
     public Ts table;
+    public Ts current;
 
-    public Sa2ts(SaProg node){
-        
+   
 
+    public Sa2ts(SaNode root){
+        this.table= new Ts();
+	root.accept(this)
+	
+
+    }
+ public Ts getTableGlobale(){
+        return this.table;
     }
 
     public Void visit(SaDecFonc node)
     {
-        Ts ts= new Ts();
+        this.current= new Ts();
+
         
-        if(ts.fonctions.containsKey(node.getNom())){
+        if(current.fonctions.containsKey(node.getNom())){
+           
            System.out.println("error");
             System.exit(0);}
-        if(node.getParametres()!=null)
-            ts.fonctions.put(node.getNom(),new TsItemFct(node.getNom(),node.getParametres().length() , ts, node) );
-        ts.fonctions.put(node.getNom(),new TsItemFct(node.getNom(),0 , ts, node) );
-return null;
+        if(node.getParametres()!=null){
+            current.fonctions.put(node.getNom(),new TsItemFct(node.getNom(),node.getParametres().length() , current, node) );
+            node.getParametres().accept(this);}
+        current.fonctions.put(node.getNom(),new TsItemFct(node.getNom(),0 , table, node) );
+        
+        node.getCorps().accept(this);
+        node.getVariable().accept(this);
+        this.current=null;
+        
+        this.current=null;
+        
+        return null;
 }
             
         
- /*  public Void visit(SaDecVar node)
+   public Void visit(SaDecVar node)
     {
-            //ici pas besoin de nouvelle table , comprendre table locale table globale
-        
-        if(table.variables.containsKey(node.getNom()))
+            
+        if(table.variables.containsKey(node.getNom())){
            System.out.println("error");
-            System.exit(0);
-  	if(node.getNom()!=null)
+            System.exit(0);}
+  	if(node.getNom()!=null){
             table.variables.put(node.getNom(),new TsItemVar(node.getNom(),node.getNom().length()));
+			node.accept(this);}
 	table.variables.put(node.getNom(), new TsItemVar(node.getNom(), 0));
+	
         return null;
 }
    public Void visit(SaDecTab node)
     {
             
         
-        if(table.variables.containsKey(node.getNom()))
-           System.out.println("error");
-            System.exit(0);
-  	if(node.getTaille()!=null)
-            table.variables.put(node.getNom(),new TsItemVar(node.getNom(),node.getTaille().length()));
-	table.variables.put(node.getNom(), new TsItemVar(node.getNom(), 0));
-        return null;
-}
- /*
- public Void visit(SaAppel node)
-    {
-        Ts ts= new Ts();
-        
-        if(ts.fonctions.containsKey(node.getNom())){
+    if(table.variables.containsKey(node.getNom())){
            System.out.println("error");
             System.exit(0);}
-        if(node.getArguments()!=null)
-            ts.fonctions.put(node.getNom(),new TsItemFct(node.getNom(),node.getArguments().length(), ts, node ));
-        ts.fonctions.put(node.getNom(),new TsItemFct(node.getNom(),0 , ts, node) );
-return null;
-}*/
-
-/*   public Void visit(SaVarSimple node)
-    {
-            
-        
-        if(table.variables.containsKey(node.getNom()))
-           System.out.println("error");
-            System.exit(0);
-  	if(node.getNom()!=null)
-            table.variables.put(node.getNom(),new TsItemVar(node.getNom(),node.getNom().length()));
+  	if(node.getTaille()!=0){
+            table.variables.put(node.getNom(),new TsItemVar(node.getNom(),node.getTaille()));
+			node.accept(this);}
 	table.variables.put(node.getNom(), new TsItemVar(node.getNom(), 0));
         return null;
 }
- public Void visit(SaVarIndicee node)
+ 
+ public Void visit(SaAppel node)
+    {
+        this.current= new Ts();
+        
+        if(current.fonctions.containsKey(node.getNom())){
+           System.out.println("error");
+           System.exit(0);}
+        if(node.getArguments()!=null)
+            node.getArguments().accept(this);
+        
+        return null;
+}
+  public Void visit(SaVarSimple node)
     {
             
         
-        if(table.variables.containsKey(node.getNom()))
+        if(table.variables.containsKey(node.getNom())){
            System.out.println("error");
-            System.exit(0);
-  	if(node.getIndice()!=null)
-            table.variables.put(node.getNom(),new TsItemVar(node.getNom(),node.getIndice().length()));
+            System.exit(0);}
+ 		if(node.getNom()!=null){
+            table.variables.put(node.getNom(),new TsItemVar(node.getNom(),node.getNom().length()));
+			node.accept(this);}
+		table.variables.put(node.getNom(), new TsItemVar(node.getNom(), 0));
+        return null;
+ 
+}
+public Void visit(SaVarIndicee node)
+    {
+            
+        
+        if(table.variables.containsKey(node.getNom())){
+           System.out.println("error");
+            System.exit(0);}
+  	if(node.getIndice()!=null){
+  	         node.getIndice().accept(this);}
 	table.variables.put(node.getNom(), new TsItemVar(node.getNom(), 0));
         return null;
-}*/
+}
+
 
 }
